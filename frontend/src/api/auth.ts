@@ -44,5 +44,16 @@ export const authApi = {
     const response = await apiClient.get('/api/auth/users', { params: { role } })
     return response.data
   },
+  createUser: async (data: RegisterRequest): Promise<User> => {
+    const response = await apiClient.post('/api/auth/users', data)
+    return response.data
+  },
+  updateUser: async (id: number, data: Partial<User> & { password?: string }): Promise<User> => {
+    const response = await apiClient.put(`/api/auth/users/${id}`, data)
+    return response.data
+  },
+  deleteUser: async (id: number): Promise<void> => {
+    await apiClient.delete(`/api/auth/users/${id}`)
+  },
 }
 

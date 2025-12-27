@@ -129,6 +129,9 @@ def list_maintenance_requests(
                 MaintenanceRequest.auto_filled_team_id.in_(user_teams)
             )
         )
+    elif current_user.role == UserRole.USER:
+        # Regular users only see requests they created
+        query = query.filter(MaintenanceRequest.created_by_id == current_user.id)
     
     # Status filter
     if status:
@@ -179,6 +182,9 @@ def get_maintenance_request(
     # Role-based access check
     if current_user.role == UserRole.TECHNICIAN:
         if not check_technician_team_access(current_user.id, request.auto_filled_team_id, db):
+            raise HTTPException(status_code=403, detail="Not authorized to view this request")
+    elif current_user.role == UserRole.USER:
+        if request.created_by_id != current_user.id:
             raise HTTPException(status_code=403, detail="Not authorized to view this request")
     
     # Check if overdue

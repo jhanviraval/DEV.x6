@@ -12,10 +12,10 @@ export default function KanbanColumn({ status, requests, onUpdate }: KanbanColum
   const { setNodeRef } = useDroppable({ id: status })
 
   const statusColors = {
-    NEW: 'bg-gray-100 border-gray-300',
-    IN_PROGRESS: 'bg-yellow-100 border-yellow-300',
-    REPAIRED: 'bg-green-100 border-green-300',
-    SCRAP: 'bg-red-100 border-red-300',
+    NEW: 'bg-gray-500/10 border-gray-500/20 shadow-inner',
+    IN_PROGRESS: 'bg-yellow-500/10 border-yellow-500/20 shadow-inner',
+    REPAIRED: 'bg-green-500/10 border-green-500/20 shadow-inner',
+    SCRAP: 'bg-red-500/10 border-red-500/20 shadow-inner',
   }
 
   const statusLabels = {
@@ -26,10 +26,10 @@ export default function KanbanColumn({ status, requests, onUpdate }: KanbanColum
   }
 
   return (
-    <div ref={setNodeRef} className={`rounded-lg border-2 p-4 ${statusColors[status]}`}>
+    <div ref={setNodeRef} className={`rounded-xl border p-4 backdrop-blur-sm ${statusColors[status]}`}>
       <div className="flex justify-between items-center mb-4">
-        <h3 className="font-semibold text-gray-900">{statusLabels[status]}</h3>
-        <span className="bg-white text-gray-700 rounded-full px-2 py-1 text-sm font-medium">
+        <h3 className="font-semibold text-white tracking-wide">{statusLabels[status]}</h3>
+        <span className="bg-white/10 text-white rounded-lg px-2.5 py-1 text-xs font-semibold border border-white/5">
           {requests.length}
         </span>
       </div>
@@ -38,7 +38,7 @@ export default function KanbanColumn({ status, requests, onUpdate }: KanbanColum
           <KanbanCard key={request.id} request={request} onUpdate={onUpdate} />
         ))}
         {requests.length === 0 && (
-          <div className="text-center text-gray-500 py-8 text-sm">No requests</div>
+          <div className="text-center text-gray-500 py-8 text-sm italic border-2 border-dashed border-white/5 rounded-lg">No requests</div>
         )}
       </div>
     </div>

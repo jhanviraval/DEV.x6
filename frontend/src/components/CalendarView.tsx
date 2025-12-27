@@ -35,7 +35,7 @@ export default function CalendarView() {
   }
 
   return (
-    <div className="bg-white shadow rounded-lg p-6">
+    <div className="bg-white/5 backdrop-blur-sm border border-white/10 shadow-xl rounded-xl p-6">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"

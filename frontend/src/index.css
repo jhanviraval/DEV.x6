@@ -9,6 +9,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
 }
 
 code {
@@ -16,3 +19,73 @@ code {
     monospace;
 }
 
+/* FullCalendar Dark Glassmorphism Overrides */
+.fc {
+  --fc-page-bg-color: transparent;
+  --fc-neutral-bg-color: rgba(255, 255, 255, 0.03);
+  --fc-neutral-text-color: #9ca3af;
+  /* gray-400 */
+  --fc-border-color: rgba(255, 255, 255, 0.1);
+
+  --fc-button-text-color: #fff;
+  --fc-button-bg-color: rgba(59, 130, 246, 0.2);
+  /* blue-500/20 */
+  --fc-button-border-color: rgba(59, 130, 246, 0.3);
+  --fc-button-hover-bg-color: rgba(59, 130, 246, 0.3);
+  --fc-button-hover-border-color: rgba(59, 130, 246, 0.4);
+  --fc-button-active-bg-color: rgba(59, 130, 246, 0.4);
+  --fc-button-active-border-color: rgba(59, 130, 246, 0.5);
+
+  --fc-today-bg-color: rgba(59, 130, 246, 0.1);
+  --fc-now-indicator-color: #ef4444;
+
+  font-family: 'Inter', sans-serif;
+}
+
+.fc .fc-toolbar-title {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: #9ca3af;
+  /* gray-400 */
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 12px 0;
+  text-decoration: none;
+}
+
+.fc .fc-daygrid-day-number {
+  color: #e5e7eb;
+  /* gray-200 */
+  text-decoration: none;
+  padding: 8px;
+  font-weight: 500;
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.fc .fc-button {
+  border-radius: 0.5rem;
+  text-transform: capitalize;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  padding: 0.5rem 1rem;
+}
+
+.fc .fc-button:focus {
+  box-shadow: none;
+}
+
+/* Event styles */
+.fc-event {
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 2px 4px;
+}

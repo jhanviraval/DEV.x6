@@ -109,6 +109,11 @@ def add_team_member(
     user = db.query(User).filter(User.id == member.user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+
+    # Check for team size limit (max 10 members)
+    current_members_count = db.query(TeamMember).filter(TeamMember.team_id == team_id).count()
+    if current_members_count >= 10:
+        raise HTTPException(status_code=400, detail="Team cannot have more than 10 members")
     
     # Check if user is a technician
     if user.role != UserRole.TECHNICIAN:

@@ -11,7 +11,7 @@ export interface MaintenanceTeam {
   id: number
   team_name: string
   created_at: string
-  team_members?: TeamMember[]
+  team_members: TeamMember[]
 }
 
 export interface User {
@@ -24,7 +24,7 @@ export interface User {
 
 export const maintenanceTeamApi = {
   list: async (): Promise<MaintenanceTeam[]> => {
-    const response = await apiClient.get('/api/maintenance-teams')
+    const response = await apiClient.get('/api/maintenance-teams/')
     return response.data
   },
   get: async (id: number): Promise<MaintenanceTeam> => {
@@ -32,7 +32,7 @@ export const maintenanceTeamApi = {
     return response.data
   },
   create: async (data: { team_name: string }): Promise<MaintenanceTeam> => {
-    const response = await apiClient.post('/api/maintenance-teams', data)
+    const response = await apiClient.post('/api/maintenance-teams/', data)
     return response.data
   },
   update: async (id: number, data: { team_name: string }): Promise<MaintenanceTeam> => {

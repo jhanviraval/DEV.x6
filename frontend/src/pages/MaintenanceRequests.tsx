@@ -10,8 +10,8 @@ export default function MaintenanceRequests() {
   return (
     <div className="px-4 py-6 sm:px-0">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Maintenance Requests</h1>
-        <p className="mt-2 text-sm text-gray-600">Manage and track maintenance requests</p>
+        <h1 className="text-3xl font-bold text-white tracking-tight">Maintenance Requests</h1>
+        <p className="mt-2 text-sm text-gray-400">Manage and track maintenance requests</p>
       </div>
 
       <Tabs value={view} onValueChange={(v) => setView(v as 'kanban' | 'calendar')}>
