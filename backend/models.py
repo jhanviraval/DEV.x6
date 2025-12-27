@@ -53,7 +53,7 @@ class User(Base):
 
     # Relationships
     assigned_equipment = relationship("Equipment", back_populates="assigned_employee_rel", foreign_keys="Equipment.assigned_employee_id")
-    maintenance_requests = relationship("MaintenanceRequest", back_populates="assigned_technician_rel", foreign_keys="MaintenanceRequest.assigned_technician_id")
+    maintenance_requests = relationship("MaintenanceRequest", back_populates="assigned_technician", foreign_keys="MaintenanceRequest.assigned_technician_id")
     team_memberships = relationship("TeamMember", back_populates="user")
 
 
@@ -134,6 +134,6 @@ class MaintenanceRequest(Base):
     # Relationships
     equipment = relationship("Equipment", back_populates="maintenance_requests")
     maintenance_team = relationship("MaintenanceTeam", back_populates="maintenance_requests")
-    assigned_technician_rel = relationship("User", foreign_keys=[assigned_technician_id], back_populates="maintenance_requests")
+    assigned_technician = relationship("User", foreign_keys=[assigned_technician_id], back_populates="maintenance_requests")
     created_by = relationship("User", foreign_keys=[created_by_id])
 

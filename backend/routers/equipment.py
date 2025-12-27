@@ -2,7 +2,7 @@
 Equipment routes with CRUD, search, filter, and smart button
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import or_, func
 from database import get_db
 from models import Equipment, User, MaintenanceRequest, RequestStatus
@@ -151,7 +151,10 @@ def get_equipment_maintenance_requests(
     if not equipment:
         raise HTTPException(status_code=404, detail="Equipment not found")
     
-    requests = db.query(MaintenanceRequest).filter(
+    requests = db.query(MaintenanceRequest).options(
+        joinedload(MaintenanceRequest.equipment),
+        joinedload(MaintenanceRequest.assigned_technician)
+    ).filter(
         MaintenanceRequest.equipment_id == equipment_id
     ).all()
     

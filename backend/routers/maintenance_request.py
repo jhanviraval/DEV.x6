@@ -2,7 +2,7 @@
 Maintenance Request routes with business logic (auto-fill, workflows, scrap, overdue)
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import and_, or_
 from datetime import date, datetime
 from database import get_db
@@ -90,12 +90,11 @@ def create_maintenance_request(
     db.refresh(db_request)
     
     # Check if overdue
-    is_overdue = (
+    db_request.is_overdue = bool(
         db_request.scheduled_date and
         db_request.scheduled_date < date.today() and
         db_request.status != RequestStatus.REPAIRED
     )
-    db_request.is_overdue = is_overdue
     
     return db_request
 
@@ -112,15 +111,24 @@ def list_maintenance_requests(
     current_user: User = Depends(get_current_user)
 ):
     """List maintenance requests with filters"""
-    query = db.query(MaintenanceRequest)
+    query = db.query(MaintenanceRequest).options(
+        joinedload(MaintenanceRequest.equipment),
+        joinedload(MaintenanceRequest.maintenance_team),
+        joinedload(MaintenanceRequest.assigned_technician)
+    )
     
     # Role-based filtering
     if current_user.role == UserRole.TECHNICIAN:
-        # Technicians can only see requests from their teams
+        # Technicians can see requests assigned to them OR from their teams
         user_teams = db.query(TeamMember.team_id).filter(
             TeamMember.user_id == current_user.id
         ).subquery()
-        query = query.filter(MaintenanceRequest.auto_filled_team_id.in_(user_teams))
+        query = query.filter(
+            or_(
+                MaintenanceRequest.assigned_technician_id == current_user.id,
+                MaintenanceRequest.auto_filled_team_id.in_(user_teams)
+            )
+        )
     
     # Status filter
     if status:
@@ -143,7 +151,7 @@ def list_maintenance_requests(
     # Mark overdue requests
     today = date.today()
     for req in requests:
-        req.is_overdue = (
+        req.is_overdue = bool(
             req.scheduled_date and
             req.scheduled_date < today and
             req.status != RequestStatus.REPAIRED and
@@ -160,7 +168,11 @@ def get_maintenance_request(
     current_user: User = Depends(get_current_user)
 ):
     """Get maintenance request by ID"""
-    request = db.query(MaintenanceRequest).filter(MaintenanceRequest.id == request_id).first()
+    request = db.query(MaintenanceRequest).options(
+        joinedload(MaintenanceRequest.equipment),
+        joinedload(MaintenanceRequest.maintenance_team),
+        joinedload(MaintenanceRequest.assigned_technician)
+    ).filter(MaintenanceRequest.id == request_id).first()
     if not request:
         raise HTTPException(status_code=404, detail="Maintenance request not found")
     
@@ -171,7 +183,7 @@ def get_maintenance_request(
     
     # Check if overdue
     today = date.today()
-    request.is_overdue = (
+    request.is_overdue = bool(
         request.scheduled_date and
         request.scheduled_date < today and
         request.status != RequestStatus.REPAIRED and
@@ -253,7 +265,7 @@ def update_maintenance_request(
     
     # Check if overdue
     today = date.today()
-    db_request.is_overdue = (
+    db_request.is_overdue = bool(
         db_request.scheduled_date and
         db_request.scheduled_date < today and
         db_request.status != RequestStatus.REPAIRED and

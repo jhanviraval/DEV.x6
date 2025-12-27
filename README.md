@@ -42,13 +42,16 @@ A production-ready, modular, and scalable Maintenance Management System built wi
 - **@dnd-kit** - Drag-and-drop functionality
 - **FullCalendar.js** - Calendar component
 
+### Database
+- **SQLite** - Local development database (file-based, no setup required)
+- **PostgreSQL** - Optional for production use
+
 ### Deployment
-- **Docker & Docker Compose** - Containerization
 
 ## 🏗️ Project Structure
 
 ```
-space/
+gear Gaurd/
 ├── backend/
 │   ├── routers/          # API route handlers
 │   │   ├── auth.py
@@ -61,9 +64,12 @@ space/
 │   ├── database.py       # Database configuration
 │   ├── auth.py           # JWT authentication
 │   ├── main.py           # FastAPI application
+│   ├── init_db.py        # Database initialization
 │   ├── seed_data.py      # Database seeding script
-│   ├── requirements.txt
-│   └── Dockerfile
+│   ├── requirements.txt  # Python dependencies
+│   ├── start.sh          # Setup and start script
+│   ├── env.example       # Environment template
+│   └── gearguard.db      # SQLite database (created on first run)
 ├── frontend/
 │   ├── src/
 │   │   ├── api/          # API client functions
@@ -74,44 +80,43 @@ space/
 │   │   └── main.tsx
 │   ├── package.json
 │   ├── vite.config.ts
-│   └── Dockerfile
-├── docker-compose.yml
-└── README.md
+│   ├── start.sh          # Setup and start script
+│   └── env.example       # Environment template
+├── QUICKSTART.md         # Quick start guide
+└── README.md             # This file
 ```
+
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Docker and Docker Compose installed
-- Git (optional, for cloning)
+- Python 3.11 or higher
+- Node.js 18 or higher
+- npm (comes with Node.js)
 
 ### Installation
 
-1. **Clone or navigate to the project directory:**
+**Super Quick Start:**
+
+1. **Start Backend** (Terminal 1):
    ```bash
-   cd space
+   cd backend
+   ./start.sh
    ```
 
-2. **Start the application with Docker Compose:**
+2. **Start Frontend** (Terminal 2):
    ```bash
-   docker-compose up -d
+   cd frontend
+   ./start.sh
    ```
 
-   This will start:
-   - PostgreSQL database on port 5432
-   - FastAPI backend on port 8000
-   - React frontend on port 3000
-
-3. **Seed the database with initial data:**
-   ```bash
-   docker-compose exec backend python seed_data.py
-   ```
-
-4. **Access the application:**
-   - Frontend: http://localhost:3000
+3. **Access the application:**
+   - Frontend: http://localhost:5173
    - Backend API: http://localhost:8000
    - API Docs: http://localhost:8000/docs
+
+📖 **For quick setup instructions, see [QUICKSTART.md](QUICKSTART.md)**
 
 ### Default Login Credentials
 
@@ -266,31 +271,6 @@ cd frontend
 npm test  # If tests are added
 ```
 
-## 🐳 Docker Commands
-
-```bash
-# Start services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
-
-# Rebuild containers
-docker-compose up -d --build
-
-# Access backend shell
-docker-compose exec backend bash
-
-# Access database
-docker-compose exec db psql -U gearguard -d gearguard_db
-
-# Seed database
-docker-compose exec backend python seed_data.py
-```
-
 ## 🔒 Security Considerations
 
 1. **Change default passwords** in production
@@ -320,8 +300,8 @@ VITE_API_URL=http://localhost:8000
 ## 🐛 Troubleshooting
 
 ### Database Connection Issues
-- Ensure PostgreSQL container is running: `docker-compose ps`
-- Check database logs: `docker-compose logs db`
+- Check if database file exists: `ls backend/gearguard.db`
+- Try resetting the database: Delete `gearguard.db` and run `python init_db.py`
 - Verify DATABASE_URL in environment
 
 ### Frontend Not Loading
