@@ -12,16 +12,15 @@ A production-ready, modular, and scalable Maintenance Management System built wi
 - **Reporting**: Analytics and insights for maintenance operations
 
 ### Key Features
-
-- ✅ JWT Authentication with role-based access control
-- ✅ Kanban board with drag-and-drop for request management
-- ✅ Calendar view for preventive maintenance scheduling
-- ✅ Auto-fill logic for equipment maintenance teams
-- ✅ Overdue request tracking and indicators
-- ✅ Equipment status management (Active/Scrapped)
-- ✅ Workflow states: NEW → IN_PROGRESS → REPAIRED/SCRAP
-- ✅ Search and filter capabilities
-- ✅ Responsive UI with Tailwind CSS
+- **🛡️ Comprehensive Admin Panel**: Dedicated interface for managing users, teams, and system configurations.
+- **🔧 Equipment Lifecycle**: Create, update, view, and delete (Admin only) equipment records.
+- **busts_in_silhouette: Maintenance Teams**: Manage specialized teams and assign technicians.
+- **✅ Role-Based Access Control**: Granular permissions (Admin, Manager, Technician, User).
+- **📋 Kanban Workflow**: Drag-and-drop board for request lifecycle management.
+- **📅 Preventive Calendar**: Schedule and track routine maintenance.
+- **🌗 Dark Mode Ready**: Infrastructure built for theming (currently light/dark compatible).
+- **⚡ Smart Actions**: Context-aware buttons and navigation.
+- **📱 Responsive Design**: Fully optimized for various screen sizes.
 
 ## 📋 Tech Stack
 
@@ -29,22 +28,24 @@ A production-ready, modular, and scalable Maintenance Management System built wi
 - **Python 3.11+**
 - **FastAPI** - Modern, fast web framework
 - **SQLAlchemy** - ORM for database operations
-- **PostgreSQL** - Production database
-- **JWT** - Authentication tokens
+- **SQLite** - Default database for ease of setup (production-ready via PostgreSQL)
+- **JWT** - Authentication tokens (python-jose)
 - **Pydantic** - Data validation
+- **Passlib** - Password hashing (bcrypt)
+- **Alembic** - Database migrations
 
 ### Frontend
 - **React 18** - UI library
 - **TypeScript** - Type safety
 - **Vite** - Build tool
-- **Tailwind CSS** - Styling
+- **Tailwind CSS** - Styling (with Dark Mode support)
 - **React Query** - Data fetching and caching
-- **@dnd-kit** - Drag-and-drop functionality
-- **FullCalendar.js** - Calendar component
+- **Lucide React** - Iconography
+- **Context API** - State management (Auth, Theme)
 
 ### Database
-- **SQLite** - Local development database (file-based, no setup required)
-- **PostgreSQL** - Optional for production use
+- **SQLite** - Primary database (file-based `gearguard.db`), heavily optimized for this deployment.
+- **PostgreSQL** - Supported via driver `psycopg2` (optional configuration).
 
 ### Deployment
 
@@ -236,13 +237,13 @@ alembic upgrade head
 - `GET /api/equipment/{id}/maintenance-requests` - Smart button: Get related requests
 
 ### Maintenance Teams
-- `GET /api/maintenance-teams` - List teams
+- `GET /api/maintenance-teams` - List all teams
 - `GET /api/maintenance-teams/{id}` - Get team details
-- `POST /api/maintenance-teams` - Create team (ADMIN/MANAGER)
-- `PUT /api/maintenance-teams/{id}` - Update team (ADMIN/MANAGER)
-- `DELETE /api/maintenance-teams/{id}` - Delete team (ADMIN)
-- `POST /api/maintenance-teams/{id}/members` - Add technician
-- `DELETE /api/maintenance-teams/{id}/members/{user_id}` - Remove technician
+- `POST /api/maintenance-teams` - Create new team (Admin/Manager)
+- `DELETE /api/maintenance-teams/{id}` - Delete team (Admin/Manager)
+- `POST /api/maintenance-teams/{id}/members` - Add technician to team
+- `DELETE /api/maintenance-teams/{id}/members/{user_id}` - Remove technician form team
+- `PUT /api/maintenance-teams/{id}/members/{user_id}` - Update member details
 
 ### Maintenance Requests
 - `GET /api/maintenance-requests` - List requests (with filters)
